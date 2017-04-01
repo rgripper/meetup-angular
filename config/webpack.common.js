@@ -135,7 +135,8 @@ module.exports = function (options) {
             {
               loader: '@angularclass/conventions-loader?selectorPrefix=',
               options: {
-                selectorPrefix: 'lan'
+                selectorPrefix: 'ln-',
+                cssExtension: '.scss'
               }
             }
             ,

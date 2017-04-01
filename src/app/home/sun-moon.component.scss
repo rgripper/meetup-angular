@@ -1,19 +1,21 @@
-* {-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;position:relative;} /* Box sizing. Thanks Chris Coyier! */
-body {background:#211d46;font-size:10px;margin:auto;}
-.circle {border-radius:100vw;}
-.half {border-radius:0 0 100vw 100vw;}
+:host {
+    * {-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;position:relative;} /* Box sizing. Thanks Chris Coyier! */
+    body {background:#211d46;font-size:10px;margin:auto;}
+    .circle {border-radius:100vw;}
+    .half {border-radius:0 0 100vw 100vw;}
 
-.moon {background:#fff;border-left:5vw solid rgba(201,235,235,.75);box-shadow:0 0 0 2vw #312e55,0 0 1vw 2vw #4e4b7e,0 0 0 10vw #27254d;height:20vw;margin:2vw auto -10vw auto;text-align:center;width:20vw;}
-.moon > * {display:inline-block;top:9vw;}
+    .moon {background:#fff;border-left:5vw solid rgba(201,235,235,.75);box-shadow:0 0 0 2vw #312e55,0 0 1vw 2vw #4e4b7e,0 0 0 10vw #27254d;height:20vw;margin:2vw auto -10vw auto;text-align:center;width:20vw;}
+    .moon > * {display:inline-block;top:9vw;}
 
-.crater {background:rgba(201,235,235,.25);height:1vw;left:2vw;position:absolute;top:5vw;width:1vw;}
-.crater:first-child {}
-.crater:nth-child(2) {transform:translate(2vw,1vw);}
-.crater:nth-child(3) {transform:translateY(2vw);}
-.crater.large {background:rgba(201,235,235,.75);height:2vw;left:auto;right:5vw;top:3vw;width:2vw;}
+    .crater {background:rgba(201,235,235,.25);height:1vw;left:2vw;position:absolute;top:5vw;width:1vw;}
+    .crater:first-child {}
+    .crater:nth-child(2) {transform:translate(2vw,1vw);}
+    .crater:nth-child(3) {transform:translateY(2vw);}
+    .crater.large {background:rgba(201,235,235,.75);height:2vw;left:auto;right:5vw;top:3vw;width:2vw;}
 
-.eye {background:#9ab3b3;height:2vw;margin:0 1vw;width:2vw;}
-.mouth {background:#9ab3b3;height:2vw;vertical-align:-2vw;width:4vw;}
+    .eye {background:#9ab3b3;height:2vw;margin:0 1vw;width:2vw;}
+    .mouth {background:#9ab3b3;height:2vw;vertical-align:-2vw;width:4vw;}
 
-.cloud {background:rgba(100,100,100,.5);border-top-left-radius:100vw;border-bottom-left-radius:100vw;clear:both;float:right;height:10vw;width:30vw;}
-.cloud.bottom {width:40vw;}
+    .cloud {background:rgba(100,100,100,.5);border-top-left-radius:100vw;border-bottom-left-radius:100vw;clear:both;float:right;height:10vw;width:30vw;}
+    .cloud.bottom {width:40vw;}
+}

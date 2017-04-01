@@ -8,7 +8,6 @@ import { NoContentComponent } from './no-content';
 
 import { DataResolver } from './app.resolver';
 
-
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home',  component: LandscapeComponent },
