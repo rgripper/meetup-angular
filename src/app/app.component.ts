@@ -13,11 +13,7 @@ import { AppState } from './app.service';
  * Top Level Component
  */
 @Component({
-  selector: 'app',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: [
-    './app.component.css'
-  ],
   template: `
     <nav>
       <a [routerLink]=" ['./'] "
