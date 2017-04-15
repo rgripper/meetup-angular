@@ -1,0 +1,21 @@
+:host {
+    display: block;
+    width: 50vw;
+    height: 50vh;
+    margin: 0 auto;
+    position: relative;
+
+    .ship-wrapper {
+        transition: 0.25s linear;
+    }
+
+    .projectile {
+        position: abolute;
+        background: #d0f0dd;
+        box-shadow: 0px 0px 0 #40ff22,
+        0px 0px 4px #30ff1f,
+        0px 0px 8px #20ff1b,
+        0px 0px 16px #10ff18;
+        border-radius: 4px;
+    }
+}

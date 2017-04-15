@@ -8,28 +8,3 @@ body {
     margin: 0;
     height: 100vh;
 }
-
-html {
-    font-size: 16px;
-}
-
-.sky {
-    background: linear-gradient(to bottom, rgba(32, 124, 229, 1) 0%, rgba(83, 165, 244, 1) 100%);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 50vh;
-
-    &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: black;
-        opacity: 0.3;
-        z-index: 1000;
-    }
-}
