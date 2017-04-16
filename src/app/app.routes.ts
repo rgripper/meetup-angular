@@ -1,4 +1,4 @@
-import { BattlefieldComponent } from './game/battlefield.component';
+import { BattlefieldComponent } from './battle/battlefield.component';
 import { Routes } from '@angular/router';
 
 import { AboutComponent } from './about';

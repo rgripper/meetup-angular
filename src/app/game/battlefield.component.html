@@ -1,5 +1,0 @@
-<div class="ship-wrapper" *ngFor="let ship of ships$ | async; trackBy: trackById"  style="display: block;" style.transform="translate({{ship.position.x}}px,{{ship.position.y}}px)">
-    <ln-ship style.transform="rotate({{ship.angle}}deg)"></ln-ship>
-</div>
-
-<div class="projectile" *ngFor="let projectile of projectiles$ | async; trackBy: trackById" style.transform="translate({{projectile.position.x}}px,{{projectile.position.y}}px)"></div>

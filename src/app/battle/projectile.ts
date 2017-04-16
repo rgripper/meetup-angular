@@ -1,5 +1,5 @@
 import { Position } from './position';
-import { Ship } from "app/game/ship";
+import { Ship } from "./ship";
 
 export interface Projectile {
     id: number,
