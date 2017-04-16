@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 
-
-import { AppState, BattleState } from '../app.reducer';
-
+import { AppState } from 'store/app/reducer';
+import { BattleState } from "store/app/battle/state";
 
 @Component({})
 export class BattlefieldComponent {

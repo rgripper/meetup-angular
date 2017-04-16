@@ -1,4 +1,3 @@
-import { accountReducer, battleReducer, initialAppState } from './app.reducer';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -31,6 +30,9 @@ import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 import { ShipComponent } from "app/battle/ship.component";
 import { BattlefieldComponent } from "app/battle/battlefield.component";
+import { accountReducer } from "store/app/account/reducer";
+import { battleReducer } from "store/app/battle/reducer";
+import { initialAppState } from 'store/app/reducer';
 
 // Application wide providers
 const APP_PROVIDERS = [
