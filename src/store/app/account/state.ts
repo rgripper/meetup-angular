@@ -1,5 +1,5 @@
-import { User } from "./user";
+import { Player } from "./player";
 
 export interface AccountState {
-    user: User;
+    player: Player;
 }

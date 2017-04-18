@@ -7,20 +7,17 @@
 
     background: #222;
 
-    .ship-wrapper {
-        transition: 0.25s linear;
-    }
-
     .projectile {
-        transition: 0.25s linear;
-        position: abolute;
-        background: #d0f0dd;
-        box-shadow: 0px 0px 0 #40ff22,
-        0px 0px 4px #30ff1f,
-        0px 0px 8px #20ff1b,
-        0px 0px 16px #10ff18;
-        border-radius: 4px;
-        width: 2px;
-        height: 2px;
+        border: 2px solid #009688;
+        // transition: 0.25s linear;
+        // position: abolute;
+        // background: #d0f0dd;
+        // box-shadow: 0px 0px 0 #40ff22,
+        // 0px 0px 4px #30ff1f,
+        // 0px 0px 8px #20ff1b,
+        // 0px 0px 16px #10ff18;
+        // border-radius: 4px;
+        // width: 2px;
+        // height: 2px;
     }
 }

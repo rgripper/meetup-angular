@@ -1,17 +1,47 @@
-import { Component } from '@angular/core';
+import { Subscription } from 'rxjs/Rx';
+import { Direction } from '../../store/app/battle/direction';
+import { BattleStateService } from '../../store/app/battle/state.service';
+import { Component, OnDestroy } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 
 import { AppState } from 'store/app/reducer';
 import { BattleState } from "store/app/battle/state";
+import { Ship } from "store/app/battle/ship";
+
+type BattleStateAndPlayerShip = BattleState & { playerShip: Ship };
 
 @Component({})
-export class BattlefieldComponent {
+export class BattlefieldComponent implements OnDestroy {
 
-    battle$: Observable<BattleState>;
+    battle$: Observable<BattleStateAndPlayerShip>;
 
-    constructor(store: Store<AppState>) {
-        this.battle$ = store.select(x => x.battle);
+    private subscription: Subscription;
+
+    constructor(store: Store<AppState>, battleStateService: BattleStateService) {
+        this.battle$ = store.select(x => x).map(x => ({ ...x.battle, playerShip: x.battle.ships.find(s => s.playerId == x.account.player.id)}));
+
+        this.subscription = Observable
+            .merge(
+                Observable.fromEvent(window, 'keyup').map((event: KeyboardEvent) => ({ key: event.key, down: false })), 
+                Observable.fromEvent(window, 'keydown').map((event: KeyboardEvent) => ({ key: event.key, down: true })))
+            .subscribe(event => {
+                const shipId = 1;
+                switch(event.key) {
+                    case 'a':
+                        event.down ? battleStateService.startMoving(shipId, Direction.Left) : battleStateService.stopMoving(shipId, Direction.Left);
+                        return;
+                    case 'd':
+                        event.down ? battleStateService.startMoving(shipId, Direction.Right) : battleStateService.stopMoving(shipId, Direction.Right);
+                        return;
+                    case 'w':
+                        event.down ? battleStateService.startMoving(shipId, Direction.Up) : battleStateService.stopMoving(shipId, Direction.Up);
+                        return;
+                    case 's':
+                        event.down ? battleStateService.startMoving(shipId, Direction.Down) : battleStateService.stopMoving(shipId, Direction.Down);
+                        return;
+                }
+            });
 
         // this.projectiles$ = <any>Observable
         //     .interval(50)
@@ -39,4 +69,7 @@ export class BattlefieldComponent {
         return item.id;
     }
 
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 }

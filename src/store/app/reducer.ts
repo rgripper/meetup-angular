@@ -6,7 +6,21 @@ export interface AppState {
     battle: BattleState
 }
 
-export const initialAppState: AppState = <AppState>{
-    account: { user: { id: 1, name: 'Bob' } },
-    battle: { playerShip: { id: 1, userId: 1, position: { x: 1, y: 1 }, angle: 90 }, projectiles: [], monsterShips: [] }
+export const initialAppState: AppState = {
+    account: {
+        player: { id: 1, name: 'Bob' }
+    },
+    battle: {
+        projectiles: [],
+        ships: [
+            {
+                id: 1,
+                playerId: 1,
+                position: { x: 1, y: 1 },
+                size: { width: 50, height: 50 },
+                speed: 4,
+                directions: { }
+            }
+        ]
+    }
 }

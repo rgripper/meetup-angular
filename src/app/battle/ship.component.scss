@@ -1,42 +1,6 @@
 :host {
-
-    @keyframes shining {
-        0% {
-            height: 20%;
-        }
-        50% {
-            height: 15%;
-        }
-        100% {
-            height: 20%;
-        }
-    }
-
-    font-size: 15px;
-    width: 2em;
-    height: 4em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+    display: inline-block;
     transition: 0.25s linear;
 
-    >.cannon {}
-
-    >.body {
-        width: 100%;
-        height: 80%;
-        border-radius: 15%;
-        clip-path: polygon(0 100%, 50% 0, 100% 100%);
-        background: #90A4AE;
-    }
-
-    >.engine {
-        height: 20%;
-        width: 80%;
-
-        border-radius: 0 0 50% 50%;
-        background: radial-gradient(ellipse at top, rgba(40, 170, 250, 1) 0%, rgba(255, 255, 255, 0) 70%);
-        animation: shining 1s ease infinite;
-    }
+    border: 2px solid #03A9F4;
 }

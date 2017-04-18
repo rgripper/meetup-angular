@@ -30,9 +30,7 @@ import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 import { ShipComponent } from "app/battle/ship.component";
 import { BattlefieldComponent } from "app/battle/battlefield.component";
-import { accountReducer } from "store/app/account/reducer";
-import { battleReducer } from "store/app/battle/reducer";
-import { initialAppState } from 'store/app/reducer';
+import { AppStoreModule } from "store/app/store.module";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -62,7 +60,7 @@ type StoreType = {
     BrowserModule,
     FormsModule,
     HttpModule,
-    StoreModule.provideStore({ account: accountReducer, battle: battleReducer }, initialAppState),
+    AppStoreModule,
     RouterModule.forRoot(routes, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection

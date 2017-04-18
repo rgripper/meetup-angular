@@ -1,6 +1,6 @@
 <div *ngIf="battle$ | async as battle">
-    <div class="ship-wrapper" style="display: block;" style.transform="translate({{battle.playerShip.position.x}}px,{{battle.playerShip.position.y}}px)">
-        <ln-ship style.transform="rotate({{battle.playerShip.angle}}deg)"></ln-ship>
-    </div>
-    <div class="projectile" *ngFor="let projectile of battle.projectiles; trackBy: trackById" style.transform="translate({{projectile.position.x}}px,{{projectile.position.y}}px)"></div>
+    <ln-ship style.transform="translate({{battle.playerShip.position.x}}px,{{battle.playerShip.position.y}}px)" [ship]="battle.playerShip"></ln-ship>
+    <div class="projectile" *ngFor="let projectile of battle.projectiles; trackBy: trackById" 
+        style.transform="translate({{projectile.position.x}}px,{{projectile.position.y}}px)"
+        [style.width.px]="projectile.size.width" [style.height.px]="projectile.size.height"></div>
 </div>
