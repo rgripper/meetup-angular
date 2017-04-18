@@ -1,3 +1,4 @@
+import { processCycle } from './process-cycle';
 import { BattleState } from "./state";
 import { BattleAction } from "store/app/battle/state.service";
 
@@ -31,6 +32,9 @@ export function battleReducer(state: BattleState, action: BattleAction): BattleS
             const updatedShip = { ...ship, directions };
 
             return { ...state, ships: state.ships.filter(x => x != ship).concat(updatedShip) };
+        }
+        case 'Battle.Cycle': {
+            return processCycle(state);
         }
         default:
             return state;
