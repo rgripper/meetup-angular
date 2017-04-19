@@ -27,7 +27,7 @@ export class BattleStateService {
         this.dispatch({ type: 'Battle.Shoot', payload: { shipId, stop: true } });
     }
 
-    cycle() {
+    runCycle() {
         this.dispatch({ type: 'Battle.Cycle', payload: undefined });
     }
 

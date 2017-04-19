@@ -1,6 +1,7 @@
-import { processCycle } from './process-cycle';
+import { runCycle } from './process-cycle';
 import { BattleState } from "./state";
-import { BattleAction } from "store/app/battle/state.service";
+import { BattleAction } from "./action";
+import { Direction } from "store/app/battle/direction";
 
 export function battleReducer(state: BattleState, action: BattleAction): BattleState {
     switch (action.type) {
@@ -12,21 +13,12 @@ export function battleReducer(state: BattleState, action: BattleAction): BattleS
             }
 
             let directions: any = {};
-            if (action.payload.stop) {
-                if (action.payload.direction == ship.directions.horizontal) {
-                    directions = { ...ship.directions, horizontal: undefined };
-                }
-                if (action.payload.direction == ship.directions.vertical) {
-                    directions = { ...ship.directions, vertical: undefined };
-                }
+
+            if (action.payload.direction == Direction.Left || action.payload.direction == Direction.Right) {
+                directions = { ...ship.directions, horizontal: action.payload.stop ? undefined : action.payload.direction };
             }
-            else {
-                if (action.payload.direction == ship.directions.horizontal) {
-                    directions = { ...ship.directions, horizontal: action.payload.direction };
-                }
-                if (action.payload.direction == ship.directions.vertical) {
-                    directions = { ...ship.directions, vertical: action.payload.direction };
-                }
+            else if (action.payload.direction == Direction.Down || action.payload.direction == Direction.Up) {
+                directions = { ...ship.directions, vertical: action.payload.stop ? undefined : action.payload.direction };
             }
 
             const updatedShip = { ...ship, directions };
@@ -34,7 +26,7 @@ export function battleReducer(state: BattleState, action: BattleAction): BattleS
             return { ...state, ships: state.ships.filter(x => x != ship).concat(updatedShip) };
         }
         case 'Battle.Cycle': {
-            return processCycle(state);
+            return runCycle(state);
         }
         default:
             return state;

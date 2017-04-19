@@ -11,6 +11,7 @@ export const initialAppState: AppState = {
         player: { id: 1, name: 'Bob' }
     },
     battle: {
+        fieldSize: { width: 640, height: 480 },
         projectiles: [],
         ships: [
             {

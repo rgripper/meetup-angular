@@ -8,8 +8,8 @@ export type BattleAction =
     | {
         type: 'Battle.Shoot',
         payload: { shipId: number, stop?: boolean }
+    }
     | {
         type: 'Battle.Cycle',
         payload: undefined
-    }
-};
+    };

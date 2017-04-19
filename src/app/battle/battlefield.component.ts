@@ -16,7 +16,9 @@ export class BattlefieldComponent implements OnDestroy {
 
     battle$: Observable<BattleStateAndPlayerShip>;
 
-    private subscription: Subscription;
+    private readonly subscription: Subscription;
+
+    private readonly cycleSubscription: Subscription;
 
     constructor(store: Store<AppState>, battleStateService: BattleStateService) {
         this.battle$ = store.select(x => x).map(x => ({ ...x.battle, playerShip: x.battle.ships.find(s => s.playerId == x.account.player.id)}));
@@ -43,6 +45,7 @@ export class BattlefieldComponent implements OnDestroy {
                 }
             });
 
+            this.cycleSubscription = Observable.interval(25).subscribe(() => battleStateService.runCycle());
         // this.projectiles$ = <any>Observable
         //     .interval(50)
         //     .map(n => [
@@ -71,5 +74,6 @@ export class BattlefieldComponent implements OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.cycleSubscription.unsubscribe();
     }
 }
