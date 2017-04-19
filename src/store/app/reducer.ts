@@ -20,7 +20,8 @@ export const initialAppState: AppState = {
                 position: { x: 1, y: 1 },
                 size: { width: 50, height: 50 },
                 speed: 4,
-                directions: { }
+                directions: { },
+                isShooting: false
             }
         ]
     }

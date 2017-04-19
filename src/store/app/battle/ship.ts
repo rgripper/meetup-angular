@@ -8,5 +8,6 @@ export interface Ship {
     position: Position,
     size: Size,
     speed: number,
-    directions: { vertical?: Direction.Up | Direction.Down, horizontal?: Direction.Left | Direction.Right }
+    directions: { vertical?: Direction.Up | Direction.Down, horizontal?: Direction.Left | Direction.Right },
+    isShooting: boolean
 }

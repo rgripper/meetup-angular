@@ -22,8 +22,18 @@ export function battleReducer(state: BattleState, action: BattleAction): BattleS
             }
 
             const updatedShip = { ...ship, directions };
-
             return { ...state, ships: state.ships.filter(x => x != ship).concat(updatedShip) };
+        }
+        case 'Battle.Shoot': {
+            const ship = state.ships.find(x => x.id == action.payload.shipId);
+            if (!ship) {
+                console.log('ship does not exist. id: ', action.payload.shipId)
+                return state;
+            }
+
+            const updatedShip = { ...ship, isShooting: !action.payload.stop };
+            console.log(updatedShip);
+            return { ...state, ships: state.ships.filter(x => x != ship).concat(updatedShip) }
         }
         case 'Battle.Cycle': {
             return runCycle(state);

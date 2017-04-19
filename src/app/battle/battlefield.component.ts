@@ -42,6 +42,8 @@ export class BattlefieldComponent implements OnDestroy {
                     case 's':
                         event.down ? battleStateService.startMoving(shipId, Direction.Down) : battleStateService.stopMoving(shipId, Direction.Down);
                         return;
+                    case 'Enter':
+                        event.down ? battleStateService.startShooting(shipId) : battleStateService.stopShooting(shipId);
                 }
             });
 
