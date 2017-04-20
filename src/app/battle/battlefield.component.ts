@@ -5,7 +5,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 
-import { AppState } from 'store/app/reducer';
+import { AppState } from 'store/app/state';
 import { BattleState } from "store/app/battle/state";
 import { Ship } from "store/app/battle/ship";
 
@@ -19,6 +19,8 @@ export class BattlefieldComponent implements OnDestroy {
     private readonly subscription: Subscription;
 
     private readonly cycleSubscription: Subscription;
+
+    private readonly cycleInterval = 25;
 
     constructor(store: Store<AppState>, battleStateService: BattleStateService) {
         this.battle$ = store.select(x => x).map(x => ({ ...x.battle, playerShip: x.battle.ships.find(s => s.playerId == x.account.player.id)}));
@@ -47,7 +49,7 @@ export class BattlefieldComponent implements OnDestroy {
                 }
             });
 
-            this.cycleSubscription = Observable.interval(25).subscribe(() => battleStateService.runCycle());
+            this.cycleSubscription = Observable.interval(this.cycleInterval).subscribe(() => battleStateService.runCycle());
         // this.projectiles$ = <any>Observable
         //     .interval(50)
         //     .map(n => [

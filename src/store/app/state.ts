@@ -1,5 +1,6 @@
 import { AccountState } from "./account/state";
 import { BattleState } from "./battle/state";
+import { Direction } from "store/app/battle/direction";
 
 export interface AppState {
     account: AccountState,
@@ -21,7 +22,10 @@ export const initialAppState: AppState = {
                 size: { width: 50, height: 50 },
                 speed: 4,
                 directions: { },
-                isShooting: false
+                isShooting: false,
+                weaponMount: {
+                    direction: Direction.Right
+                }
             }
         ]
     }

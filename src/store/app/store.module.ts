@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { StoreModule } from "@ngrx/store";
 import { accountReducer } from "store/app/account/reducer";
 import { battleReducer } from "store/app/battle/reducer";
-import { initialAppState } from "store/app/reducer";
+import { initialAppState } from "store/app/state";
 import { BattleStateService } from "store/app/battle/state.service";
 
 @NgModule({

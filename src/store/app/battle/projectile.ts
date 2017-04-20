@@ -1,10 +1,7 @@
-import { Position } from './position';
 import { Ship } from "./ship";
-import { Size } from "store/app/battle/size";
+import { Moveable } from "store/app/battle/moveable";
 
-export interface Projectile {
+export interface Projectile extends Moveable {
     id: number,
     ship: Ship,
-    position: Position,
-    size: Size
 }

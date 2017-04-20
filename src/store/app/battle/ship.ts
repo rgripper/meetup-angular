@@ -1,13 +1,12 @@
-import { Position } from './position';
-import { Size } from "store/app/battle/size";
 import { Direction } from "store/app/battle/direction";
+import { Moveable } from "store/app/battle/moveable";
 
-export interface Ship {
+export interface Ship extends Moveable {
     id: number,
     playerId: number,
-    position: Position,
-    size: Size,
-    speed: number,
-    directions: { vertical?: Direction.Up | Direction.Down, horizontal?: Direction.Left | Direction.Right },
+
     isShooting: boolean
+    weaponMount: {
+        direction: Direction.Left | Direction.Right
+    }
 }

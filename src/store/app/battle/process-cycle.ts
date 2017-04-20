@@ -1,27 +1,28 @@
+import { Moveable } from './moveable';
 import { Projectile } from './projectile';
 import { BattleState } from './state';
 import { Ship } from "store/app/battle/ship";
 import { Direction } from "store/app/battle/direction";
 import { Size } from "store/app/battle/size";
 
-function updatePosition(ship: Ship, fieldSize: Size): Ship {
-    let x = ship.position.x;
-    if (ship.directions.horizontal == Direction.Left) {
-        x -= ship.speed;
+function updatePosition<T extends Moveable>(moveable: T, fieldSize: Size): T {
+    let x = moveable.position.x;
+    if (moveable.directions.horizontal == Direction.Left) {
+        x -= moveable.speed;
     }
-    else if (ship.directions.horizontal == Direction.Right) {
-        x += ship.speed;
-    }
-
-    let y = ship.position.y;
-    if (ship.directions.vertical == Direction.Up) {
-        y -= ship.speed;
-    }
-    else if (ship.directions.vertical == Direction.Down) {
-        y += ship.speed;
+    else if (moveable.directions.horizontal == Direction.Right) {
+        x += moveable.speed;
     }
 
-    return { ...ship, position: { x: Math.min(fieldSize.width, Math.max(0, x)), y: Math.min(fieldSize.height, Math.max(0, y)) } };
+    let y = moveable.position.y;
+    if (moveable.directions.vertical == Direction.Up) {
+        y -= moveable.speed;
+    }
+    else if (moveable.directions.vertical == Direction.Down) {
+        y += moveable.speed;
+    }
+
+    return Object.assign(moveable, { position: { x: Math.min(fieldSize.width - moveable.size.width, Math.max(0, x)), y: Math.min(fieldSize.height - moveable.size.height, Math.max(0, y)) } });
 }
 
 
@@ -33,21 +34,27 @@ let newProjectileId = 1;
 
 function createProjectile(ship: Ship): Projectile {
     // TODO: add id
+    const size = { width: 5, height: 5 };
     return {
         id: newProjectileId++,
         ship,
-        position: ship.position,
-        size: { width: 5, height: 5 }
+        position: { 
+            x: ship.position.x + (ship.weaponMount.direction == Direction.Left ? -size.width : ship.size.width), 
+            y: ship.position.y + Math.round((ship.size.height / 2) - (size.height / 2))
+        },
+        size,
+        speed: 5,
+        directions: { horizontal: ship.weaponMount.direction }
     }
 }
 
-function updateProjectile(projectile: Projectile): Projectile {
-    return projectile;
+function updateProjectile(projectile: Projectile, fieldSize: Size): Projectile {
+    return updatePosition(projectile, fieldSize);
 }
 
 export function runCycle(state: BattleState): BattleState {
     const ships = state.ships.map(x => updateShip(x, state.fieldSize));
     const newProjectiles = ships.filter(ship => ship.isShooting).map(createProjectile);
-    const updatedProjectiles = state.projectiles.map(updateProjectile);
+    const updatedProjectiles = state.projectiles.map(x => updateProjectile(x, state.fieldSize));
     return { ...state, ships, projectiles: updatedProjectiles.concat(newProjectiles) };
 }

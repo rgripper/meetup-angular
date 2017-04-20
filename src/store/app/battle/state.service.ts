@@ -1,5 +1,5 @@
 import { BattleAction } from './action';
-import { AppState } from '../reducer';
+import { AppState } from '../state';
 import { Direction } from "./direction";
 import { Store } from "@ngrx/store";
 import { Injectable } from "@angular/core";

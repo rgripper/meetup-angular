@@ -14,7 +14,6 @@ import {
   RouterModule,
   PreloadAllModules
 } from '@angular/router';
-import { StoreModule } from '@ngrx/store';
 
 import '../styles/styles.scss';
 /*
