@@ -1,3 +1,4 @@
+import { Time } from './time';
 import { Direction } from "store/app/battle/direction";
 
 export type BattleAction =
@@ -11,5 +12,5 @@ export type BattleAction =
     }
     | {
         type: 'Battle.Cycle',
-        payload: undefined
+        payload: { interval: Time }
     };

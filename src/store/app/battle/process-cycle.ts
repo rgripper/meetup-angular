@@ -4,6 +4,7 @@ import { BattleState } from './state';
 import { Ship } from "store/app/battle/ship";
 import { Direction } from "store/app/battle/direction";
 import { Size } from "store/app/battle/size";
+import { Time } from "store/app/battle/time";
 
 function updatePosition<T extends Moveable>(moveable: T, fieldSize: Size): T {
     let x = moveable.position.x;
@@ -52,9 +53,9 @@ function updateProjectile(projectile: Projectile, fieldSize: Size): Projectile {
     return updatePosition(projectile, fieldSize);
 }
 
-export function runCycle(state: BattleState): BattleState {
+export function runCycle(state: BattleState, interval: Time): BattleState {
     const ships = state.ships.map(x => updateShip(x, state.fieldSize));
     const newProjectiles = ships.filter(ship => ship.isShooting).map(createProjectile);
     const updatedProjectiles = state.projectiles.map(x => updateProjectile(x, state.fieldSize));
-    return { ...state, ships, projectiles: updatedProjectiles.concat(newProjectiles) };
+    return { ...state, elapsedTime: state.elapsedTime + interval, ships, projectiles: updatedProjectiles.concat(newProjectiles) };
 }

@@ -3,6 +3,7 @@ import { AppState } from '../state';
 import { Direction } from "./direction";
 import { Store } from "@ngrx/store";
 import { Injectable } from "@angular/core";
+import { Time } from "store/app/battle/time";
 
 @Injectable()
 export class BattleStateService {
@@ -27,8 +28,8 @@ export class BattleStateService {
         this.dispatch({ type: 'Battle.Shoot', payload: { shipId, stop: true } });
     }
 
-    runCycle() {
-        this.dispatch({ type: 'Battle.Cycle', payload: undefined });
+    runCycle(interval: Time) {
+        this.dispatch({ type: 'Battle.Cycle', payload: { interval } });
     }
 
     private dispatch(action: BattleAction) {

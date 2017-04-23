@@ -49,7 +49,7 @@ export class BattlefieldComponent implements OnDestroy {
                 }
             });
 
-            this.cycleSubscription = Observable.interval(this.cycleInterval).subscribe(() => battleStateService.runCycle());
+            this.cycleSubscription = Observable.interval(this.cycleInterval).subscribe(() => battleStateService.runCycle(this.cycleInterval));
         // this.projectiles$ = <any>Observable
         //     .interval(50)
         //     .map(n => [

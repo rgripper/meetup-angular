@@ -46,7 +46,7 @@ export function battleReducer(state: BattleState, action: BattleAction): BattleS
             return { ...state, ships: state.ships.filter(x => x != ship).concat(updatedShip) }
         }
         case 'Battle.Cycle': {
-            return runCycle(state);
+            return runCycle(state, action.payload.interval);
         }
         default:
             return state;
