@@ -1,7 +1,7 @@
-import { runCycle } from './process-cycle';
-import { BattleState } from "./state";
+import { runCycle } from 'sim/run-cycle';
+import { BattleState } from "sim/state";
 import { BattleAction } from "./action";
-import { Direction } from "store/app/battle/direction";
+import { Direction } from "sim/direction";
 
 export function battleReducer(state: BattleState, action: BattleAction): BattleState {
     switch (action.type) {

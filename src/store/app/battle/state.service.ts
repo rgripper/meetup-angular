@@ -1,9 +1,9 @@
 import { BattleAction } from './action';
 import { AppState } from '../state';
-import { Direction } from "./direction";
+import { Direction } from "sim/direction";
 import { Store } from "@ngrx/store";
 import { Injectable } from "@angular/core";
-import { Time } from "store/app/battle/time";
+import { Time } from "sim/time";
 
 @Injectable()
 export class BattleStateService {

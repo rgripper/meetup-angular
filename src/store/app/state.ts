@@ -1,6 +1,6 @@
 import { AccountState } from "./account/state";
-import { BattleState } from "./battle/state";
-import { Direction } from "store/app/battle/direction";
+import { BattleState } from "sim/state";
+import { Direction } from "sim/direction";
 
 export interface AppState {
     account: AccountState,
@@ -13,7 +13,7 @@ export const initialAppState: AppState = {
     },
     battle: {
         elapsedTime: 0,
-        fieldSize: { width: 640, height: 480 },
+        field: { position: { x: 0, y: 0 }, size: { width: 640, height: 480 } },
         projectiles: [],
         ships: [
             {

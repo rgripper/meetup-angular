@@ -1,5 +1,5 @@
-import { Time } from './time';
-import { Direction } from "store/app/battle/direction";
+import { Time } from 'sim/time';
+import { Direction } from "sim/direction";
 
 export type BattleAction =
     | {

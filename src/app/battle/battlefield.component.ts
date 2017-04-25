@@ -1,13 +1,13 @@
 import { Subscription } from 'rxjs/Rx';
-import { Direction } from '../../store/app/battle/direction';
+import { Direction } from 'sim/direction';
 import { BattleStateService } from '../../store/app/battle/state.service';
 import { Component, OnDestroy } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 
 import { AppState } from 'store/app/state';
-import { BattleState } from "store/app/battle/state";
-import { Ship } from "store/app/battle/ship";
+import { BattleState } from "sim/state";
+import { Ship } from "sim/ship";
 
 type BattleStateAndPlayerShip = BattleState & { playerShip: Ship };
 

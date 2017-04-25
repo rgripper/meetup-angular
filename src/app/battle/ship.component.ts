@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { Ship } from "store/app/battle/ship";
+import { Ship } from "sim/ship";
 
 @Component({})
 export class ShipComponent {

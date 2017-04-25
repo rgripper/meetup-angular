@@ -1,5 +1,5 @@
-import { Direction } from "store/app/battle/direction";
-import { Moveable } from "store/app/battle/moveable";
+import { Direction } from "./direction";
+import { Moveable } from "./moveable";
 
 export interface Ship extends Moveable {
     id: number,
