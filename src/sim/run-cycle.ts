@@ -1,8 +1,9 @@
+import { Weapon } from './weapon';
 import { Moveable } from './moveable';
 import { Projectile } from './projectile';
 import { BattleState } from 'sim/state';
 import { Position } from "./position";
-import { Ship } from "./ship";
+import { Ship, WeaponMount } from "./ship";
 import { Direction } from "./direction";
 import { Time } from "./time";
 import { Rectangle } from "./rectangle";
@@ -48,7 +49,7 @@ function updateShip(ship: Ship, field: Rectangle): Ship {
 
 let newProjectileId = 1;
 
-function createProjectile(ship: Ship): Projectile {
+function createProjectile(ship: Ship, weaponMount: WeaponMount): Projectile {
     // TODO: add id
     const size = { width: 5, height: 5 };
     return {
@@ -60,13 +61,14 @@ function createProjectile(ship: Ship): Projectile {
         },
         size,
         speed: 5,
-        directions: { horizontal: ship.weaponMount.direction }
+        directions: { horizontal: ship.weaponMount.direction },
+        damage: weaponMount.weapon.damage
     }
 }
 
 export function runCycle(state: BattleState, interval: Time): BattleState {
     const ships = state.ships.map(x => updateShip(x, state.field));
-    const newProjectiles = ships.filter(ship => ship.isShooting).map(createProjectile).filter(x => Rectangle.within(x, state.field));
+    const newProjectiles = ships.filter(ship => ship.isShooting).map(ship => createProjectile(ship, ship.weaponMount)).filter(x => Rectangle.within(x, state.field));
     const updatedProjectiles = state.projectiles.map(x => updatePosition(x)).filter(x => Rectangle.within(x, state.field));
 
     return { ...state, elapsedTime: state.elapsedTime + interval, ships, projectiles: updatedProjectiles.concat(newProjectiles) };

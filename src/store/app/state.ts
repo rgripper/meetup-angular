@@ -19,13 +19,15 @@ export const initialAppState: AppState = {
             {
                 id: 1,
                 playerId: 1,
+                health: { maximum: 200, current: 200 },
                 position: { x: 1, y: 1 },
                 size: { width: 50, height: 50 },
                 speed: 4,
                 directions: { },
                 isShooting: false,
                 weaponMount: {
-                    direction: Direction.Right
+                    direction: Direction.Right,
+                    weapon: { id: 1, damage: 30 }
                 }
             }
         ]
