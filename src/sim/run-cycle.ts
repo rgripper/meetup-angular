@@ -39,11 +39,40 @@ function updatePositionWithinBox<T extends Moveable>(moveable: T, nextPosition: 
     });
 }
 
+function inflictDamage(projectile: Projectile, ship: Ship): Ship {
+    return {
+        ...ship,
+        health: {
+            maximum: ship.health.maximum,
+            current: Math.max(0, ship.health.current - projectile.damage)
+        }
+    }
+}
+
+function collideProjectileWithAnyShip(projectile: Projectile, ships: Ship[]): { affectedShip?: Ship, unaffectedShips: Ship[] } {
+    const index = ships.findIndex(ship => ship.health.current > 0 && Rectangle.intersect(projectile, ship));
+    if (index < 0) return { unaffectedShips: ships };
+    const affectedShip = inflictDamage(projectile, ships[index]);
+    return { affectedShip, unaffectedShips: ships.splice(index, 1) };
+}
+
+function collideProjectilesWithShips(projectiles: Projectile[], ships: Ship[]): { unaffectedProjectiles: Projectile[], unaffectedShips: Ship[] } {
+    let unaffectedShips = ships;
+    const unaffectedProjectiles = projectiles.filter(proj => {
+        const result = collideProjectileWithAnyShip(proj, unaffectedShips);
+        unaffectedShips = result.unaffectedShips;
+        const unaffected = result.affectedShip == undefined;
+        return unaffected;
+    });
+
+    return { unaffectedProjectiles, unaffectedShips };
+}
+
 function updatePosition<T extends Moveable>(moveable: T): T {
     return Object.assign(moveable, { position: getNextPosition(moveable) });
 }
 
-function updateShip(ship: Ship, field: Rectangle): Ship {
+function updateShipPosition(ship: Ship, field: Rectangle): Ship {
     return updatePositionWithinBox(ship, getNextPosition(ship), field);
 }
 
@@ -67,9 +96,17 @@ function createProjectile(ship: Ship, weaponMount: WeaponMount): Projectile {
 }
 
 export function runCycle(state: BattleState, interval: Time): BattleState {
-    const ships = state.ships.map(x => updateShip(x, state.field));
-    const newProjectiles = ships.filter(ship => ship.isShooting).map(ship => createProjectile(ship, ship.weaponMount)).filter(x => Rectangle.within(x, state.field));
+    const movedShips = state.ships.map(x => updateShipPosition(x, state.field));
+    const newProjectiles = movedShips.filter(ship => ship.isShooting).map(ship => createProjectile(ship, ship.weaponMount)).filter(x => Rectangle.within(x, state.field));
     const updatedProjectiles = state.projectiles.map(x => updatePosition(x)).filter(x => Rectangle.within(x, state.field));
+    const allProjectiles = updatedProjectiles.concat(newProjectiles);
 
-    return { ...state, elapsedTime: state.elapsedTime + interval, ships, projectiles: updatedProjectiles.concat(newProjectiles) };
+    const collisionResults = collideProjectilesWithShips(allProjectiles, movedShips);
+
+    return { 
+        ...state, 
+        elapsedTime: state.elapsedTime + interval, 
+        ships: collisionResults.unaffectedShips, 
+        projectiles: collisionResults.unaffectedProjectiles 
+    };
 }
