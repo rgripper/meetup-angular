@@ -7,30 +7,27 @@ import { Observable } from "rxjs";
 
 import { AppState } from 'store/app/state';
 import { BattleState } from "sim/state";
-import { Ship } from "sim/ship";
-
-type BattleStateAndPlayerShip = BattleState & { playerShip: Ship };
 
 @Component({})
 export class BattlefieldComponent implements OnDestroy {
 
-    battle$: Observable<BattleStateAndPlayerShip>;
+    battle$: Observable<BattleState>;
 
     private readonly subscription: Subscription;
 
     private readonly cycleSubscription: Subscription;
 
-    private readonly cycleInterval = 25;
+    private readonly cycleInterval = 50;
 
     constructor(store: Store<AppState>, battleStateService: BattleStateService) {
-        this.battle$ = store.select(x => x).map(x => ({ ...x.battle, playerShip: x.battle.ships.find(s => s.playerId == x.account.player.id)}));
+        this.battle$ = store.select(x => x.battle);
 
         this.subscription = Observable
             .merge(
                 Observable.fromEvent(window, 'keyup').map((event: KeyboardEvent) => ({ key: event.key, down: false })), 
                 Observable.fromEvent(window, 'keydown').map((event: KeyboardEvent) => ({ key: event.key, down: true })))
             .subscribe(event => {
-                const shipId = 1;
+                const shipId = 0;
                 switch(event.key) {
                     case 'a':
                         event.down ? battleStateService.startMoving(shipId, Direction.Left) : battleStateService.stopMoving(shipId, Direction.Left);
@@ -50,27 +47,7 @@ export class BattlefieldComponent implements OnDestroy {
             });
 
             this.cycleSubscription = Observable.interval(this.cycleInterval).subscribe(() => battleStateService.runCycle(this.cycleInterval));
-        // this.projectiles$ = <any>Observable
-        //     .interval(50)
-        //     .map(n => [
-        //         {
-        //             id: 1,
-        //             position: { x: 110, y: 110 }
-        //         },
-        //         {
-        //             id: 2,
-        //             position: { x: n * 15, y: n * 15 }
-        //         }
-        //     ]);
-        // .scan((acc, value) => value.map(x2 => ({
-        //     ...x2,
-        //     angle: acc.length ? this.getAngle(x2.position, acc.find(x1 => x1.id == x2.id)!.position) : 0
-        // })), []);
     }
-
-    // private getAngle(position1: Position, position2: Position) {
-    //     return Math.atan2(position2.y - position1.y, position2.x - position1.x) * 180 / Math.PI - 90;
-    // }
 
     trackById(_index: number, item: { id: number }) {
         return item.id;

@@ -1,4 +1,3 @@
-import { Weapon } from './weapon';
 import { Moveable } from './moveable';
 import { Projectile } from './projectile';
 import { BattleState } from 'sim/state';
@@ -7,6 +6,7 @@ import { Ship, WeaponMount } from "./ship";
 import { Direction } from "./direction";
 import { Time } from "./time";
 import { Rectangle } from "./rectangle";
+import { Director } from "sim/director";
 
 function getNextPosition(moveable: Moveable): Position {
     let x = moveable.position.x;
@@ -50,22 +50,24 @@ function inflictDamage(projectile: Projectile, ship: Ship): Ship {
 }
 
 function collideProjectileWithAnyShip(projectile: Projectile, ships: Ship[]): { affectedShip?: Ship, unaffectedShips: Ship[] } {
-    const index = ships.findIndex(ship => ship.health.current > 0 && Rectangle.intersect(projectile, ship));
-    if (index < 0) return { unaffectedShips: ships };
-    const affectedShip = inflictDamage(projectile, ships[index]);
-    return { affectedShip, unaffectedShips: ships.splice(index, 1) };
+    const ship = ships.find(ship => ship.health.current > 0 && Rectangle.intersect(projectile, ship));
+    if (ship == undefined) return { unaffectedShips: ships };
+    const affectedShip = inflictDamage(projectile, ship);
+    return { affectedShip, unaffectedShips: ships.filter(x => x != ship) };
 }
 
-function collideProjectilesWithShips(projectiles: Projectile[], ships: Ship[]): { unaffectedProjectiles: Projectile[], unaffectedShips: Ship[] } {
+function collideProjectilesWithShips(projectiles: Projectile[], ships: Ship[]): { unaffectedProjectiles: Projectile[], unaffectedShips: Ship[], affectedShips: Ship[] } {
     let unaffectedShips = ships;
+    const affectedShips: Ship[] = [];
     const unaffectedProjectiles = projectiles.filter(proj => {
         const result = collideProjectileWithAnyShip(proj, unaffectedShips);
+        if(result.affectedShip) affectedShips.push(result.affectedShip);
         unaffectedShips = result.unaffectedShips;
-        const unaffected = result.affectedShip == undefined;
-        return unaffected;
+        const projectileIsUnaffected = result.affectedShip == undefined;
+        return projectileIsUnaffected;
     });
 
-    return { unaffectedProjectiles, unaffectedShips };
+    return { unaffectedProjectiles, unaffectedShips, affectedShips };
 }
 
 function updatePosition<T extends Moveable>(moveable: T): T {
@@ -101,12 +103,18 @@ export function runCycle(state: BattleState, interval: Time): BattleState {
     const updatedProjectiles = state.projectiles.map(x => updatePosition(x)).filter(x => Rectangle.within(x, state.field));
     const allProjectiles = updatedProjectiles.concat(newProjectiles);
 
+    const waveResult = Director.tryCreateNextWave(state.field, state.latestWave, state.elapsedTime);
+    //console.log('waveResult', waveResult);
     const collisionResults = collideProjectilesWithShips(allProjectiles, movedShips);
 
+    if(collisionResults.unaffectedShips.length != movedShips.length) console.log(collisionResults);
+    const ships = waveResult ? collisionResults.unaffectedShips.concat(waveResult.ships) : collisionResults.unaffectedShips;
+    //console.log('new state', ships);
     return { 
-        ...state, 
+        ...state,
+        latestWave: waveResult ? waveResult.wave : state.latestWave,
         elapsedTime: state.elapsedTime + interval, 
-        ships: collisionResults.unaffectedShips, 
+        ships, 
         projectiles: collisionResults.unaffectedProjectiles 
     };
 }

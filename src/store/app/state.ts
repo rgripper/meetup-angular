@@ -17,7 +17,7 @@ export const initialAppState: AppState = {
         projectiles: [],
         ships: [
             {
-                id: 1,
+                id: 0,
                 playerId: 1,
                 health: { maximum: 200, current: 200 },
                 position: { x: 1, y: 1 },
