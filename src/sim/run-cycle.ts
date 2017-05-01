@@ -61,7 +61,7 @@ function collideProjectilesWithShips(projectiles: Projectile[], ships: Ship[]): 
     const affectedShips: Ship[] = [];
     const unaffectedProjectiles = projectiles.filter(proj => {
         const result = collideProjectileWithAnyShip(proj, unaffectedShips);
-        if(result.affectedShip) affectedShips.push(result.affectedShip);
+        if (result.affectedShip) affectedShips.push(result.affectedShip);
         unaffectedShips = result.unaffectedShips;
         const projectileIsUnaffected = result.affectedShip == undefined;
         return projectileIsUnaffected;
@@ -100,21 +100,24 @@ function createProjectile(ship: Ship, weaponMount: WeaponMount): Projectile {
 export function runCycle(state: BattleState, interval: Time): BattleState {
     const movedShips = state.ships.map(x => updateShipPosition(x, state.field));
     const newProjectiles = movedShips.filter(ship => ship.isShooting).map(ship => createProjectile(ship, ship.weaponMount)).filter(x => Rectangle.within(x, state.field));
-    const updatedProjectiles = state.projectiles.map(x => updatePosition(x)).filter(x => Rectangle.within(x, state.field));
+    
+    const collisionResults = collideProjectilesWithShips(state.projectiles, movedShips);
+    const updatedProjectiles = collisionResults.unaffectedProjectiles.map(x => updatePosition(x)).filter(x => Rectangle.within(x, state.field));
     const allProjectiles = updatedProjectiles.concat(newProjectiles);
 
     const waveResult = Director.tryCreateNextWave(state.field, state.latestWave, state.elapsedTime);
     //console.log('waveResult', waveResult);
-    const collisionResults = collideProjectilesWithShips(allProjectiles, movedShips);
+    
 
-    if(collisionResults.unaffectedShips.length != movedShips.length) console.log(collisionResults);
-    const ships = waveResult ? collisionResults.unaffectedShips.concat(waveResult.ships) : collisionResults.unaffectedShips;
+    if (collisionResults.unaffectedShips.length != movedShips.length) console.log(collisionResults);
+    const remainedShips = collisionResults.unaffectedShips.concat(collisionResults.affectedShips.filter(x => x.health.current > 0));
+    const ships = waveResult ? remainedShips.concat(waveResult.ships) : remainedShips;
     //console.log('new state', ships);
-    return { 
+    return {
         ...state,
         latestWave: waveResult ? waveResult.wave : state.latestWave,
-        elapsedTime: state.elapsedTime + interval, 
-        ships, 
-        projectiles: collisionResults.unaffectedProjectiles 
+        elapsedTime: state.elapsedTime + interval,
+        ships,
+        projectiles: allProjectiles
     };
 }

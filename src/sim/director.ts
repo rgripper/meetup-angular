@@ -22,7 +22,6 @@ export class Director {
         }
 
         const newOrder = (lastWave ? lastWave.order : 0) + 1;
-
         return { wave: { order: newOrder }, ships: this.createShipsForComplexity(newOrder, field) };
     }
 

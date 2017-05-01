@@ -27,7 +27,7 @@ export const initialAppState: AppState = {
                 isShooting: false,
                 weaponMount: {
                     direction: Direction.Right,
-                    weapon: { id: 1, damage: 30 }
+                    weapon: { id: 1, damage: 3 }
                 }
             }
         ]
