@@ -1,6 +1,6 @@
 <div *ngIf="battle$ | async as battle" [style.width.px]="battle.field.size.width" [style.height.px]="battle.field.size.height">
     <div *ngFor="let ship of battle.ships; trackBy: trackById">
-        <ln-ship style.transform="translate({{ship.position.x}}px,{{ship.position.y}}px)" [ship]="ship"></ln-ship>
+        <ln-ship style.transform="translate({{ship.position.x}}px,{{ship.position.y}}px)" [attr.data-player]="ship.playerId" [ship]="ship"></ln-ship>
     </div>
     <div class="projectile" *ngFor="let projectile of battle.projectiles; trackBy: trackById" 
         style.transform="translate({{projectile.position.x}}px,{{projectile.position.y}}px)"

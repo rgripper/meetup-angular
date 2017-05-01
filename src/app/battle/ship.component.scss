@@ -3,7 +3,15 @@
     position: absolute;
     transition: 0.025s linear;
 
-    > * {
-        border: 2px solid #03A9F4;
+    &[data-player='1'] {
+        > * {
+            border: 2px solid #03A9F4;
+        }
+    }
+
+    &[data-player='2'] {
+        > * {
+            border: 2px solid #FF9800;
+        }
     }
 }
