@@ -105,19 +105,25 @@ export function runCycle(state: BattleState, interval: Time): BattleState {
     const updatedProjectiles = collisionResults.unaffectedProjectiles.map(x => updatePosition(x)).filter(x => Rectangle.within(x, state.field));
     const allProjectiles = updatedProjectiles.concat(newProjectiles);
 
+    const remainedShips = collisionResults.unaffectedShips.concat(collisionResults.affectedShips.filter(x => x.health.current > 0));
+
     const waveResult = Director.tryCreateNextWave(state.field, state.latestWave, state.elapsedTime);
     //console.log('waveResult', waveResult);
-    
-
-    if (collisionResults.unaffectedShips.length != movedShips.length) console.log(collisionResults);
-    const remainedShips = collisionResults.unaffectedShips.concat(collisionResults.affectedShips.filter(x => x.health.current > 0));
     const ships = waveResult ? remainedShips.concat(waveResult.ships) : remainedShips;
+    const waveUpdate = {
+        latestWave: waveResult 
+            ? waveResult.wave 
+            : (state.latestWave && state.latestWave.completionTime != undefined) || ships.filter(x => x.playerId == 2).length > 0 
+                ? state.latestWave 
+                : { ...state.latestWave, completionTime: state.elapsedTime },
+        ships,
+    }
+
     //console.log('new state', ships);
     return {
         ...state,
-        latestWave: waveResult ? waveResult.wave : state.latestWave,
+        ...waveUpdate,
         elapsedTime: state.elapsedTime + interval,
-        ships,
         projectiles: allProjectiles
     };
 }
