@@ -5,6 +5,7 @@ import { Position } from "./position";
 import { Ship } from "./ship";
 import { Direction } from "./direction";
 import { Rectangle } from "./rectangle";
+import { Director } from "sim/director";
 
 type StateUpdater = (state: BattleState) => BattleState;
 export function applyUpdaters(state: BattleState, updaters: StateUpdater[]): BattleState {
@@ -13,10 +14,41 @@ export function applyUpdaters(state: BattleState, updaters: StateUpdater[]): Bat
     return updatedState;
 }
 
+export function performWaveGeneration(state: BattleState): BattleState {
+    const nextWaveResult = Director.tryCreateNextWave(state.field, state.latestWave, state.elapsedTime);
+    if (nextWaveResult != undefined) {
+        return {
+            ...state,
+            latestWave: nextWaveResult.wave,
+            ships: state.ships.concat(nextWaveResult.ships)
+        };
+    }
+    else {
+        const waveIsNotCompleted = (s: BattleState) => s.latestWave && s.latestWave.completionTime != undefined;
+        const waveHasShips = (s: BattleState) => s.ships.filter(x => x.playerId == 2).length > 0;
+        const waveRequiresCompletion = waveIsNotCompleted(state) || waveHasShips(state);
+        if (waveRequiresCompletion) {
+            return {
+                ...state,
+                latestWave: { ...state.latestWave, completionTime: state.elapsedTime }
+            };
+        }
+        else {
+            return state;
+        }
+    }
+}
+
 export function performPositioning(state: BattleState): BattleState {
     const ships = state.ships.map(x => updatePositionWithinBox(x, getNextPosition(x), state.field));
-    const projectiles = state.projectiles.map(x => updatePosition(x));
+    const projectiles = state.projectiles.map(x => updatePosition(x)).filter(x => Rectangle.within(x, state.field));
     return { ...state, ships, projectiles };
+}
+
+export function performShooting(state: BattleState): BattleState {
+    const collisionResults = collideWith(state.projectiles, state.ships, hit);
+    const remainedShips = collisionResults.unaffectedShips.concat(collisionResults.affectedShips.filter(x => x.health.current > 0));
+    return { ...state, ships: remainedShips, projectiles: collisionResults.unaffectedProjectiles };
 }
 
 export function performCollisions(state: BattleState): BattleState {
@@ -58,14 +90,14 @@ function collideWith(projectiles: Projectile[], ships: Ship[], hit: (ship: Ship,
         if (collisionShip) {
             affectedShips.push(hit(collisionShip, projectile));
             unaffectedShips = unaffectedShips.filter(x => x.id != collisionShip.id);
-        } 
+        }
         return collisionShip == undefined;
     });
 
-    return { 
-        unaffectedProjectiles, 
-        unaffectedShips, 
-        affectedShips 
+    return {
+        unaffectedProjectiles,
+        unaffectedShips,
+        affectedShips
     };
 }
 
