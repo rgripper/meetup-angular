@@ -17,7 +17,7 @@ export class Director {
     private static gracePeriod = 5000;
 
     static tryCreateNextWave(field: Rectangle, lastWave: Wave | undefined, currentTime: Time): WaveAndShips | undefined {
-        console.log('last wave', lastWave);
+        //console.log('last wave', lastWave);
         if (lastWave != undefined) {
             if (lastWave.completionTime == undefined) return;
             if (currentTime - lastWave.completionTime < this.gracePeriod) {
@@ -25,7 +25,7 @@ export class Director {
                 return;
             }
         }
-console.log('new wave');
+//console.log('new wave');
         const newOrder = (lastWave ? lastWave.order : 0) + 1;
         return { wave: { order: newOrder }, ships: this.createShipsForComplexity(newOrder, field) };
     }

@@ -2,15 +2,15 @@ import { Moveable } from './moveable';
 import { Projectile } from './projectile';
 import { BattleState } from 'sim/state';
 import { Position } from "./position";
-import { Ship } from "./ship";
+import { Ship, WeaponMount } from "./ship";
 import { Direction } from "./direction";
 import { Rectangle } from "./rectangle";
 import { Director } from "sim/director";
 
-type StateUpdater = (state: BattleState) => BattleState;
+export type StateUpdater = (state: BattleState) => BattleState;
 export function applyUpdaters(state: BattleState, updaters: StateUpdater[]): BattleState {
     let updatedState = state;
-    updaters.forEach(updater => updater(updatedState));
+    updaters.forEach(updater => updatedState = updater(updatedState));
     return updatedState;
 }
 
@@ -46,9 +46,12 @@ export function performPositioning(state: BattleState): BattleState {
 }
 
 export function performShooting(state: BattleState): BattleState {
-    const collisionResults = collideWith(state.projectiles, state.ships, hit);
-    const remainedShips = collisionResults.unaffectedShips.concat(collisionResults.affectedShips.filter(x => x.health.current > 0));
-    return { ...state, ships: remainedShips, projectiles: collisionResults.unaffectedProjectiles };
+    const newProjectiles = state.ships
+        .filter(ship => ship.isShooting)
+        .map(ship => createProjectile(ship, ship.weaponMount))
+        .filter(x => Rectangle.within(x, state.field));
+
+    return { ...state, projectiles: state.projectiles.concat(newProjectiles) };
 }
 
 export function performCollisions(state: BattleState): BattleState {
@@ -101,8 +104,27 @@ function collideWith(projectiles: Projectile[], ships: Ship[], hit: (ship: Ship,
     };
 }
 
+let newProjectileId = 1;
+
+function createProjectile(ship: Ship, weaponMount: WeaponMount): Projectile {
+    // TODO: add id
+    const size = { width: 5, height: 5 };
+    return {
+        id: newProjectileId++,
+        ship,
+        position: {
+            x: ship.position.x + (ship.weaponMount.direction == Direction.Left ? -size.width : ship.size.width),
+            y: ship.position.y + Math.round((ship.size.height / 2) - (size.height / 2))
+        },
+        size,
+        speed: 5,
+        directions: { horizontal: ship.weaponMount.direction },
+        damage: weaponMount.weapon.damage
+    }
+}
+
 function findCollisionShip(projectile: Projectile, ships: Ship[]): Ship | undefined {
-    return ships.find(ship => ship.health.current > 0 && Rectangle.intersect(projectile, ship));
+    return ships.find(ship => projectile.ship.playerId != ship.playerId && ship.health.current > 0 && Rectangle.intersect(projectile, ship));
 }
 
 function getNextPosition(moveable: Moveable): Position {
