@@ -1,9 +1,9 @@
 import { BattleState } from 'sim/state';
 import { Time } from "./time";
-import { StateUpdater, applyUpdaters, performCollisions, performPositioning, performShooting, performWaveGeneration } from "sim/updaters";
+import { StateUpdater, applyUpdaters, performCollisions, performPositioning, performShooting, performWaveGeneration, performShipEmergence } from "sim/updaters";
 
 const updaters: StateUpdater[] = [
-    performCollisions, performPositioning, performShooting, performWaveGeneration
+    performCollisions, performPositioning, performShipEmergence, performShooting, performWaveGeneration
 ];
 
 export function runCycle(state: BattleState, interval: Time): BattleState {

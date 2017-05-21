@@ -21,7 +21,7 @@ export class Director {
         if (lastWave != undefined) {
             if (lastWave.completionTime == undefined) return;
             if (currentTime - lastWave.completionTime < this.gracePeriod) {
-                console.log('grace period', currentTime - lastWave.completionTime, this.gracePeriod);
+                console.log('grace period', currentTime, lastWave.completionTime, this.gracePeriod);
                 return;
             }
         }

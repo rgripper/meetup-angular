@@ -15,9 +15,9 @@ export function applyUpdaters(state: BattleState, updaters: StateUpdater[]): Bat
 }
 
 export function performShipEmergence(state: BattleState): BattleState {
-    const ships = state.ships.map(x => x.emergence == 100 
-        ? x 
-        : { ...x, emergence: Math.min(x.emergence + 5, 100) });
+    const ships = state.ships.map(x => x.emergence == 1
+        ? x
+        : { ...x, emergence: Math.min(x.emergence + 0.05, 1) });
     return { ...state, ships };
 }
 
@@ -31,18 +31,14 @@ export function performWaveGeneration(state: BattleState): BattleState {
         };
     }
     else {
-        const waveIsNotCompleted = (s: BattleState) => s.latestWave && s.latestWave.completionTime != undefined;
-        const waveHasShips = (s: BattleState) => s.ships.filter(x => x.playerId == 2).length > 0;
-        const waveRequiresCompletion = waveIsNotCompleted(state) || waveHasShips(state);
-        if (waveRequiresCompletion) {
-            return {
-                ...state,
-                latestWave: { ...state.latestWave, completionTime: state.elapsedTime }
-            };
-        }
-        else {
-            return state;
-        }
+        const waveIsCompleted = state.latestWave && state.latestWave.completionTime != undefined;
+        if (waveIsCompleted) return state;
+        const waveHasShips = state.ships.filter(x => x.playerId == 2).length > 0;
+        if (waveHasShips) return state;
+        return {
+            ...state,
+            latestWave: { ...state.latestWave, completionTime: state.elapsedTime }
+        };
     }
 }
 
