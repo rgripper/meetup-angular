@@ -16,6 +16,7 @@ export class ShipCreator {
             position,
             size: { width: 60, height: 60 },
             speed: 4,
+            emergence: 0,
             weaponMount: {
                 direction: Direction.Right,
                 weapon: { id: 1, damage }

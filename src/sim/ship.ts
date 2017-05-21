@@ -7,11 +7,11 @@ export interface WeaponMount {
     weapon: Weapon
 }
 
-
 export interface Ship extends Moveable {
     id: number,
     playerId: number,
     health: { maximum: number, current: number },
+    emergence: number,
     isShooting: boolean,
     weaponMount: WeaponMount
 }

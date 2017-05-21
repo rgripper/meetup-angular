@@ -14,6 +14,13 @@ export function applyUpdaters(state: BattleState, updaters: StateUpdater[]): Bat
     return updatedState;
 }
 
+export function performShipEmergence(state: BattleState): BattleState {
+    const ships = state.ships.map(x => x.emergence == 100 
+        ? x 
+        : { ...x, emergence: Math.min(x.emergence + 5, 100) });
+    return { ...state, ships };
+}
+
 export function performWaveGeneration(state: BattleState): BattleState {
     const nextWaveResult = Director.tryCreateNextWave(state.field, state.latestWave, state.elapsedTime);
     if (nextWaveResult != undefined) {

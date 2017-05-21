@@ -24,6 +24,7 @@ export const initialAppState: AppState = {
                 size: { width: 50, height: 50 },
                 speed: 4,
                 directions: { },
+                emergence: 0,
                 isShooting: false,
                 weaponMount: {
                     direction: Direction.Right,
