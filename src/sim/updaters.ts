@@ -60,7 +60,12 @@ export function performShooting(state: BattleState): BattleState {
 export function performCollisions(state: BattleState): BattleState {
     const collisionResults = collideWith(state.projectiles, state.ships, hit);
     const remainedShips = collisionResults.unaffectedShips.concat(collisionResults.affectedShips.filter(x => x.health.current > 0));
-    return { ...state, ships: remainedShips, projectiles: collisionResults.unaffectedProjectiles };
+    const playerScores = state.playerScores.map(ps => ({ 
+        ...ps, 
+        score: ps.score + (collisionResults.playerScores[ps.playerId] || 0)
+    }));
+
+    return { ...state, playerScores, ships: remainedShips, projectiles: collisionResults.unaffectedProjectiles };
 }
 
 function updatePositionWithinBox<T extends Moveable>(moveable: T, nextPosition: Position, boundingBox: Rectangle): T {
@@ -88,13 +93,18 @@ function hit(ship: Ship, projectile: Projectile): Ship {
     }
 }
 
-function collideWith(projectiles: Projectile[], ships: Ship[], hit: (ship: Ship, projectile: Projectile) => Ship): { unaffectedProjectiles: Projectile[], unaffectedShips: Ship[], affectedShips: Ship[] } {
+function collideWith(projectiles: Projectile[], ships: Ship[], hit: (ship: Ship, projectile: Projectile) => Ship): { unaffectedProjectiles: Projectile[], unaffectedShips: Ship[], affectedShips: Ship[], playerScores: (number | undefined)[] } {
     const affectedShips: Ship[] = [];
+    const playerScores: (number | undefined)[] = [];
     let unaffectedShips = ships;
     const unaffectedProjectiles = projectiles.filter(projectile => {
         const collisionShip = findCollisionShip(projectile, unaffectedShips);
         if (collisionShip) {
-            affectedShips.push(hit(collisionShip, projectile));
+            const affectedShip = hit(collisionShip, projectile);
+            affectedShips.push(affectedShip);
+            if (affectedShip.health.current == 0) {
+                playerScores[projectile.ship.playerId] = playerScores[projectile.ship.playerId] || 0 + affectedShip.scoreOnDestruction;
+            }
             unaffectedShips = unaffectedShips.filter(x => x.id != collisionShip.id);
         }
         return collisionShip == undefined;
@@ -103,7 +113,8 @@ function collideWith(projectiles: Projectile[], ships: Ship[], hit: (ship: Ship,
     return {
         unaffectedProjectiles,
         unaffectedShips,
-        affectedShips
+        affectedShips,
+        playerScores
     };
 }
 

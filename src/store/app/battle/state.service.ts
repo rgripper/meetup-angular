@@ -11,12 +11,10 @@ export class BattleStateService {
     }
 
     startMoving(shipId: number, direction: Direction) {
-        console.log('moving!');
         this.dispatch({ type: 'Battle.Move', payload: { shipId, direction } });
     }
 
     stopMoving(shipId: number, direction: Direction) {
-        console.log('stopped moving!');
         this.dispatch({ type: 'Battle.Move', payload: { shipId, stop: true, direction } });
     }
 

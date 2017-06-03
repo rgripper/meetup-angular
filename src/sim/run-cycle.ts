@@ -7,6 +7,7 @@ const updaters: StateUpdater[] = [
 ];
 
 export function runCycle(state: BattleState, interval: Time): BattleState {
+
     return { 
         ...applyUpdaters(state, updaters), 
         elapsedTime: state.elapsedTime + interval 

@@ -10,4 +10,5 @@ export interface BattleState {
     field: Rectangle,
     projectiles: Projectile[],
     ships: Ship[],
+    playerScores: { playerId: number, score: number }[],
 }

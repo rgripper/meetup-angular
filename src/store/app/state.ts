@@ -15,6 +15,7 @@ export const initialAppState: AppState = {
         elapsedTime: 0,
         field: { position: { x: 0, y: 0 }, size: { width: 640, height: 480 } },
         projectiles: [],
+        playerScores: [{ playerId: 1, score: 0 }, { playerId: 2, score: 0 }],
         ships: [
             {
                 id: 0,
@@ -25,6 +26,7 @@ export const initialAppState: AppState = {
                 speed: 4,
                 directions: { },
                 emergence: 0,
+                scoreOnDestruction: 10,
                 isShooting: false,
                 weaponMount: {
                     direction: Direction.Right,

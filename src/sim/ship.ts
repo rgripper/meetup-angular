@@ -13,5 +13,6 @@ export interface Ship extends Moveable {
     health: { maximum: number, current: number },
     emergence: number,
     isShooting: boolean,
+    scoreOnDestruction: number,
     weaponMount: WeaponMount
 }

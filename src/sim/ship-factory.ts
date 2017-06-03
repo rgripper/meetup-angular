@@ -18,6 +18,7 @@ export class ShipCreator {
             size,
             speed: 4,
             emergence: 0,
+            scoreOnDestruction: health + damage,
             weaponMount: {
                 direction: Direction.Right,
                 weapon: { id: 1, damage }
