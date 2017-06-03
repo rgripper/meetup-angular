@@ -2,6 +2,8 @@ import { Rectangle } from './rectangle';
 import { ShipCreator } from './ship-factory';
 import { Time } from "sim/time";
 import { Ship } from "sim/ship";
+import { Size } from "sim/size";
+import { Position } from "sim/position";
 
 export interface Wave {
     order: number,
@@ -31,9 +33,18 @@ export class Director {
     }
 
     private static createShipsForComplexity(order: number, field: Rectangle): Ship[] {
-        return new Array(order).fill(null).map(() => {
-            const position = { x: field.size.width - 20, y: Math.ceil(field.size.height / 2) };
-            return ShipCreator.create(20 + order, order, this.enemyPlayerId, position);
+        const maxSize = { width: 40, height: 40 };
+        return this.createPositions(order, field, maxSize).map(position => {
+            const size = maxSize;
+            return ShipCreator.create(20 + order, order, this.enemyPlayerId, position, size);
         });
+    }
+
+    private static createPositions(shipCount: number, field: Rectangle, shipSize: Size): Position[] {
+        const offset = (field.size.height - shipCount * shipSize.height) / (shipCount + 1);
+        return new Array(shipCount).fill(null).map((_x, i) => ({
+            x: field.position.x + field.size.width - shipSize.width,
+            y: offset * (i + 1) + shipSize.height * i,
+        } as Position));
     }
 }
