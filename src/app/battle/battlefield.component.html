@@ -4,5 +4,11 @@
     </div>
     <div class="projectile" *ngFor="let projectile of battle.projectiles; trackBy: trackById" 
         style.transform="translate({{projectile.position.x}}px,{{projectile.position.y}}px)"
-        [style.width.px]="projectile.size.width" [style.height.px]="projectile.size.height"></div>
+        [style.width.px]="projectile.size.width" [style.height.px]="projectile.size.height">
+    </div>
+
+    <div *ngIf="battle.isCompleted" class="completion-info">
+        <div>Victory!</div>
+        <div>Score: {{battle.playerScores[0].score}}</div>
+    </div>
 </div>

@@ -12,7 +12,10 @@ export const initialAppState: AppState = {
         player: { id: 1, name: 'Bob' }
     },
     battle: {
+        maxNumberOfWaves: 0,
+        isCompleted: false,
         elapsedTime: 0,
+        latestWave: undefined,
         field: { position: { x: 0, y: 0 }, size: { width: 640, height: 480 } },
         projectiles: [],
         playerScores: [{ playerId: 1, score: 0 }, { playerId: 2, score: 0 }],
@@ -23,7 +26,7 @@ export const initialAppState: AppState = {
                 health: { maximum: 200, current: 200 },
                 position: { x: 1, y: 1 },
                 size: { width: 50, height: 50 },
-                speed: 4,
+                speed: 6,
                 directions: { },
                 emergence: 0,
                 scoreOnDestruction: 10,

@@ -5,8 +5,10 @@ import { Time } from "sim/time";
 import { Wave } from "sim/director";
 
 export interface BattleState {
+    readonly maxNumberOfWaves: number,
+    isCompleted: boolean,
     elapsedTime: Time,
-    latestWave?: Wave,
+    latestWave: Wave | undefined,
     field: Rectangle,
     projectiles: Projectile[],
     ships: Ship[],

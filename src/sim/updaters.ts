@@ -68,6 +68,11 @@ export function performCollisions(state: BattleState): BattleState {
     return { ...state, playerScores, ships: remainedShips, projectiles: collisionResults.unaffectedProjectiles };
 }
 
+export function performCompletionCheck(state: BattleState): BattleState {
+    const isCompleted = state.latestWave && state.latestWave.order > state.maxNumberOfWaves;
+    return isCompleted ? { ...state, isCompleted } : state;
+}
+
 function updatePositionWithinBox<T extends Moveable>(moveable: T, nextPosition: Position, boundingBox: Rectangle): T {
     const overflowsX = nextPosition.x < boundingBox.position.x || nextPosition.x + moveable.size.width > (boundingBox.position.x + boundingBox.size.width);
     const overflowsY = nextPosition.y < boundingBox.position.y || nextPosition.y + moveable.size.height > (boundingBox.position.y + boundingBox.size.height);
